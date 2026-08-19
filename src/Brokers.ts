@@ -193,9 +193,10 @@ export type BrokerFilterVersion = v.InferOutput<typeof BrokerFilterVersion>;
 export const BrokerFilter = Schemas.model(
     v.strictObject({
         id: Schemas.Integer,
-        name: Schemas.NullishString,
-        group_id: Schemas.NullishInteger,
-        stream_id: Schemas.NullishInteger,
+        name: v.string(),
+        group_id: Schemas.Integer,
+        stream_id: Schemas.Integer,
+        /** Null for a filter that is not attached to a broker. */
         broker_id: Schemas.NullishInteger,
         autosave: Schemas.NullishBoolean,
         altdata: Schemas.nullish(Schemas.JsonObject),
