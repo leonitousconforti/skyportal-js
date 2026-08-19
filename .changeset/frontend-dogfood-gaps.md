@@ -26,3 +26,6 @@ Fixes found while dogfooding the client in the SkyPortal frontend:
   `includeSuperObjs` and `includeTags`.
 - `postPhotometry` can send `refresh`, which the handler reads to push a
   photometry refresh to connected frontends (`upsertPhotometry` already could).
+- The follow-up request watch/unwatch endpoints accept `refreshSource` and
+  `refreshRequests`, which the handlers read to decide what to push to
+  connected frontends.

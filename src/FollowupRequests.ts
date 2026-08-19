@@ -517,8 +517,26 @@ export const postFollowupRequestComment = async (
  * @category Requests
  * @param followupRequestId - ID of the follow-up request to watch.
  */
-export const postFollowupRequestWatcher = async (client: Http.Client, followupRequestId: number): Promise<void> => {
-    await Http.post(client, `/api/followup_request/watch/${followupRequestId}`, {});
+export interface FollowupRequestWatcherOptions {
+    /**
+     * Push a source refresh to connected frontends. Defaults to true
+     * server-side.
+     */
+    readonly refreshSource?: boolean | undefined;
+    /** Push a follow-up request refresh to connected frontends. */
+    readonly refreshRequests?: boolean | undefined;
+}
+
+export const postFollowupRequestWatcher = async (
+    client: Http.Client,
+    followupRequestId: number,
+    options: FollowupRequestWatcherOptions = {}
+): Promise<void> => {
+    await Http.post(
+        client,
+        `/api/followup_request/watch/${followupRequestId}`,
+        Http.body({ refreshSource: options.refreshSource, refreshRequests: options.refreshRequests })
+    );
 };
 
 /**
@@ -528,8 +546,16 @@ export const postFollowupRequestWatcher = async (client: Http.Client, followupRe
  * @category Requests
  * @param followupRequestId - ID of the follow-up request to stop watching.
  */
-export const deleteFollowupRequestWatcher = async (client: Http.Client, followupRequestId: number): Promise<void> => {
-    await Http.del(client, `/api/followup_request/watch/${followupRequestId}`);
+export const deleteFollowupRequestWatcher = async (
+    client: Http.Client,
+    followupRequestId: number,
+    options: FollowupRequestWatcherOptions = {}
+): Promise<void> => {
+    await Http.del(
+        client,
+        `/api/followup_request/watch/${followupRequestId}`,
+        Http.body({ refreshSource: options.refreshSource, refreshRequests: options.refreshRequests })
+    );
 };
 
 /**
