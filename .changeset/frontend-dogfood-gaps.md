@@ -24,3 +24,5 @@ Fixes found while dogfooding the client in the SkyPortal frontend:
   `includePhotometryExists`, `includePeriodExists`, `includeCandidates`,
   `includeGCNCrossmatches`, `includeGCNNotes`, `includeAssociatedObjs`,
   `includeSuperObjs` and `includeTags`.
+- `postPhotometry` can send `refresh`, which the handler reads to push a
+  photometry refresh to connected frontends (`upsertPhotometry` already could).
