@@ -322,8 +322,9 @@ export const postGroup = async (client: Http.Client, payload: GroupPost): Promis
  * @category Models
  */
 export interface UpdateGroupOptions {
-    readonly nickname?: string | undefined;
-    readonly description?: string | undefined;
+    /** Pass `null` to clear the value; the column is unique, so `""` collides. */
+    readonly nickname?: string | null | undefined;
+    readonly description?: string | null | undefined;
     /** Whether the group is private. */
     readonly private?: boolean | undefined;
     /** Whether admission requests to the group are accepted automatically. */

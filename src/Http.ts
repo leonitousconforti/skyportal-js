@@ -141,7 +141,25 @@ const Envelope = v.looseObject({
     status: v.optional(v.string()),
     data: v.optional(v.unknown()),
     message: v.optional(v.nullable(v.string())),
+    version: v.optional(v.nullable(v.string())),
 });
+
+/**
+ * A response envelope, for the callers that need more than its `data`.
+ *
+ * SkyPortal's `BaseHandler` adds `version` to every response, success or
+ * error, as a sibling of `data` rather than a field inside it, so it is only
+ * reachable through the envelope.
+ *
+ * @since 1.0.0
+ * @category Models
+ */
+export interface SkyPortalEnvelope<T = unknown> {
+    readonly data: T;
+    /** The SkyPortal version the instance is running. */
+    readonly version: string | undefined;
+    readonly message: string | undefined;
+}
 
 /** @internal */
 const envelopeOf = (payload: unknown): v.InferOutput<typeof Envelope> => {
@@ -150,12 +168,12 @@ const envelopeOf = (payload: unknown): v.InferOutput<typeof Envelope> => {
 };
 
 /**
- * Return the `data` field of a SkyPortal response envelope.
+ * Return the whole envelope of a SkyPortal response, not just its `data`.
  *
  * @since 1.0.0
  * @category Decoding
  */
-export const unwrap = async (response: Response): Promise<unknown> => {
+export const unwrapEnvelope = async (response: Response): Promise<SkyPortalEnvelope> => {
     let payload: unknown;
     try {
         payload = await response.json();
@@ -165,7 +183,11 @@ export const unwrap = async (response: Response): Promise<unknown> => {
 
     const envelope = envelopeOf(payload);
     if (response.ok && envelope.status === "success") {
-        return envelope.data;
+        return {
+            data: envelope.data,
+            version: envelope.version ?? undefined,
+            message: envelope.message ?? undefined,
+        };
     }
 
     throw new SkyPortalError(
@@ -175,6 +197,14 @@ export const unwrap = async (response: Response): Promise<unknown> => {
         response.status
     );
 };
+
+/**
+ * Return the `data` field of a SkyPortal response envelope.
+ *
+ * @since 1.0.0
+ * @category Decoding
+ */
+export const unwrap = async (response: Response): Promise<unknown> => (await unwrapEnvelope(response)).data;
 
 /**
  * Return the raw body of a binary SkyPortal response.
@@ -243,6 +273,16 @@ const send = async (client: Client, options: RequestOptions): Promise<unknown> =
  */
 export const get = (client: Client, path: string, query?: QueryParams, body?: unknown): Promise<unknown> =>
     send(client, { method: "GET", path, body, query: query && params(query) });
+
+/**
+ * Issue a GET request and return its whole envelope, for the endpoints whose
+ * callers need the `version` riding alongside `data`.
+ *
+ * @since 1.0.0
+ * @category Requests
+ */
+export const getEnvelope = async (client: Client, path: string, query?: QueryParams): Promise<SkyPortalEnvelope> =>
+    unwrapEnvelope(await client.request({ method: "GET", path, query: query && params(query) }));
 
 /**
  * Issue a POST request and unwrap its envelope.

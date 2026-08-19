@@ -117,6 +117,45 @@ describe("createClient", () => {
         expect(chart).toEqual(new Uint8Array([137, 80, 78, 71]));
     });
 
+    it("sends every patchable user column, keeping an explicit null", async () => {
+        const { client, requests } = stubClient(() => envelope(null));
+
+        await client.updateUser(7, { username: "newname", first_name: null, expirationDate: null });
+
+        expect(await requests[0].json()).toEqual({
+            username: "newname",
+            first_name: null,
+            expirationDate: null,
+        });
+    });
+
+    it("clears a group nickname with an explicit null", async () => {
+        const { client, requests } = stubClient(() => envelope(null));
+
+        await client.updateGroup(3, "Group name", { nickname: null });
+
+        expect(await requests[0].json()).toEqual({ name: "Group name", nickname: null });
+    });
+
+    it("reports an allocation's total request count alongside the allocation", async () => {
+        const { client } = stubClient(() =>
+            envelope({ allocation: { id: 1, group_id: 2, instrument_id: 3 }, totalMatches: 42 })
+        );
+
+        const page = await client.fetchAllocationPage(1);
+
+        expect(page.totalMatches).toBe(42);
+        expect(page.allocation.id).toBe(1);
+    });
+
+    it("reports the SkyPortal version that rides on the envelope", async () => {
+        const { client } = stubClient(
+            () => new Response(JSON.stringify({ status: "success", data: { gitlog: [] }, version: "24.9.1" }))
+        );
+
+        expect(await client.fetchSysinfoWithVersion()).toEqual({ sysinfo: { gitlog: [] }, version: "24.9.1" });
+    });
+
     it("raises SkyPortalError on an error envelope", async () => {
         const { client } = stubClient(
             () =>

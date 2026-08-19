@@ -79,8 +79,8 @@ export const Allocation = Schemas.model(
         validity_ranges: Schemas.nullish(v.array(Schemas.JsonObject)),
         default_share_group_ids: Schemas.nullish(v.array(Schemas.Integer)),
         types: Schemas.nullish(v.array(AllocationType)),
-        group_id: Schemas.NullishInteger,
-        instrument_id: Schemas.NullishInteger,
+        group_id: Schemas.Integer,
+        instrument_id: Schemas.Integer,
         instrument: Schemas.nullish(Instruments.Instrument),
         allocation_users: Schemas.nullish(v.array(v.union([Users.User, AllocationUser]))),
         group: Schemas.nullish(Schemas.JsonObject),
@@ -221,16 +221,58 @@ export interface FetchAllocationOptions {
     readonly sortOrder?: string | undefined;
 }
 
-/** @internal */
-const AllocationEnvelope = v.object({ allocation: Allocation });
+/**
+ * An allocation together with the total number of follow-up requests it has,
+ * which the `requests` page alone does not convey.
+ *
+ * @since 1.0.0
+ * @category Models
+ */
+export const AllocationPage = Schemas.model(
+    v.strictObject({
+        allocation: Allocation,
+        totalMatches: v.optional(Schemas.Integer, 0),
+    })
+);
+
+/**
+ * @since 1.0.0
+ * @category Models
+ */
+export type AllocationPage = v.InferOutput<typeof AllocationPage>;
 
 /**
  * Retrieve a single allocation by ID.
  *
  * The response embeds the allocation's follow-up requests in `requests`; the
- * pagination and sort parameters apply to that list. (The wire response also
- * carries the total request count in a `totalMatches` sibling key, which this
- * function drops.)
+ * pagination and sort parameters apply to that list, and `totalMatches` is the
+ * unpaginated request count. Use {@link fetchAllocation} when only the
+ * allocation itself is needed.
+ *
+ * @since 1.0.0
+ * @category Requests
+ * @param allocationId - ID of the allocation.
+ */
+export const fetchAllocationPage = async (
+    client: Http.Client,
+    allocationId: number,
+    options: FetchAllocationOptions = {}
+): Promise<AllocationPage> =>
+    Http.decode(
+        AllocationPage,
+        await Http.get(client, `/api/allocation/${allocationId}`, {
+            pageNumber: options.pageNumber ?? 1,
+            numPerPage: options.numPerPage ?? 50,
+            sortBy: options.sortBy ?? "created_at",
+            sortOrder: options.sortOrder ?? "asc",
+        })
+    );
+
+/**
+ * Retrieve a single allocation by ID.
+ *
+ * The response embeds the allocation's follow-up requests in `requests`; the
+ * pagination and sort parameters apply to that list.
  *
  * @since 1.0.0
  * @category Requests
@@ -240,16 +282,7 @@ export const fetchAllocation = async (
     client: Http.Client,
     allocationId: number,
     options: FetchAllocationOptions = {}
-): Promise<Allocation> =>
-    Http.decode(
-        AllocationEnvelope,
-        await Http.get(client, `/api/allocation/${allocationId}`, {
-            pageNumber: options.pageNumber ?? 1,
-            numPerPage: options.numPerPage ?? 50,
-            sortBy: options.sortBy ?? "created_at",
-            sortOrder: options.sortOrder ?? "asc",
-        })
-    ).allocation;
+): Promise<Allocation> => (await fetchAllocationPage(client, allocationId, options)).allocation;
 
 /**
  * Create an allocation on a robotic instrument.
