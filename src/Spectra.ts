@@ -313,7 +313,7 @@ export type BulkSpectraSource = v.InferOutput<typeof BulkSpectraSource>;
  */
 export const BulkSpectrum = Schemas.model(
     v.strictObject({
-        obj_id: Schemas.NullishString,
+        obj_id: v.string(),
         observed_at: Schemas.NullishString,
         wavelengths: Schemas.list(v.number()),
         fluxes: Schemas.list(v.number()),
