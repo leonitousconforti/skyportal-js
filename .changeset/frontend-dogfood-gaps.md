@@ -17,3 +17,10 @@ Fixes found while dogfooding the client in the SkyPortal frontend:
 - New `Http.unwrapEnvelope`/`Http.getEnvelope` plus `fetchSysinfoWithVersion`
   and `fetchConfigWithVersion`, exposing the `version` that SkyPortal adds to
   every response envelope beside `data`.
+- `fetchSources` gains the 17 filter params `SourceHandler.get` reads but the
+  client did not send: `TNSname`, `includeThumbnails`, `includeColorMagnitude`,
+  `includeDetectionStats`, `includeLabellers`, `includeComments`,
+  `includeAnalyses`, `includePhotometry`, `deduplicatePhotometry`,
+  `includePhotometryExists`, `includePeriodExists`, `includeCandidates`,
+  `includeGCNCrossmatches`, `includeGCNNotes`, `includeAssociatedObjs`,
+  `includeSuperObjs` and `includeTags`.

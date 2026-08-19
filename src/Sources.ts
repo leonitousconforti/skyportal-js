@@ -1092,6 +1092,40 @@ export interface SourcesFilterOptions {
      * first.
      */
     readonly queryId?: string | undefined;
+    /** Exact TNS name to match. */
+    readonly tnsName?: string | undefined;
+    /** Embed each source's thumbnails in `thumbnails`. */
+    readonly includeThumbnails?: boolean | undefined;
+    /** Embed the color-magnitude data used by the HR diagram. */
+    readonly includeColorMagnitude?: boolean | undefined;
+    /** Embed each source's photometry summary statistics. */
+    readonly includeDetectionStats?: boolean | undefined;
+    /** Embed the users who labelled each source. */
+    readonly includeLabellers?: boolean | undefined;
+    /** Embed each source's comments. */
+    readonly includeComments?: boolean | undefined;
+    /** Embed each source's analyses. */
+    readonly includeAnalyses?: boolean | undefined;
+    /** Embed each source's photometry. */
+    readonly includePhotometry?: boolean | undefined;
+    /** Collapse duplicate photometry points when `includePhotometry` is set. */
+    readonly deduplicatePhotometry?: boolean | undefined;
+    /** Report whether each source has photometry, without embedding it. */
+    readonly includePhotometryExists?: boolean | undefined;
+    /** Report whether each source has a period annotation. */
+    readonly includePeriodExists?: boolean | undefined;
+    /** Embed the candidates each source was saved from. */
+    readonly includeCandidates?: boolean | undefined;
+    /** Embed the GCN events each source crossmatches. */
+    readonly includeGcnCrossmatches?: boolean | undefined;
+    /** Embed the GCN notes attached to each source. */
+    readonly includeGcnNotes?: boolean | undefined;
+    /** Embed the objects associated with each source. */
+    readonly includeAssociatedObjs?: boolean | undefined;
+    /** Embed the super-objects each source belongs to. */
+    readonly includeSuperObjs?: boolean | undefined;
+    /** Embed each source's tags. */
+    readonly includeTags?: boolean | undefined;
 }
 
 /** @internal */
@@ -1156,6 +1190,23 @@ const sourcesFilterParams = (options: SourcesFilterOptions): Http.QueryParams =>
     includeSpectrumExists: options.includeSpectrumExists,
     includeCommentExists: options.includeCommentExists,
     includeGeoJSON: options.includeGeoJSON,
+    TNSname: options.tnsName,
+    includeThumbnails: options.includeThumbnails,
+    includeColorMagnitude: options.includeColorMagnitude,
+    includeDetectionStats: options.includeDetectionStats,
+    includeLabellers: options.includeLabellers,
+    includeComments: options.includeComments,
+    includeAnalyses: options.includeAnalyses,
+    includePhotometry: options.includePhotometry,
+    deduplicatePhotometry: options.deduplicatePhotometry,
+    includePhotometryExists: options.includePhotometryExists,
+    includePeriodExists: options.includePeriodExists,
+    includeCandidates: options.includeCandidates,
+    includeGCNCrossmatches: options.includeGcnCrossmatches,
+    includeGCNNotes: options.includeGcnNotes,
+    includeAssociatedObjs: options.includeAssociatedObjs,
+    includeSuperObjs: options.includeSuperObjs,
+    includeTags: options.includeTags,
     sortBy: options.sortBy,
     sortOrder: options.sortOrder,
     useCache: options.useCache,
