@@ -9,10 +9,6 @@ publicHoistPattern:
     - "@types/*"
     - "@vitest/*"
 
-allowBuilds:
-    esbuild: true
-    msgpackr-extract: true
-
 peerDependencyRules:
     allowedVersions:
         typescript: "7.0.2"
