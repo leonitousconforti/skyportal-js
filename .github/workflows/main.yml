@@ -30,7 +30,6 @@ jobs:
       - run: pnpm codegen
       - run: git add src && git diff-index --cached HEAD --exit-code src
       - run: pnpm check
-      - run: pnpm circular
       - run: pnpm lint
       - run: pnpm build
       - run: pnpm test

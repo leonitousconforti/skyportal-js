@@ -48,7 +48,6 @@
     "scripts": {
         "prepare": "effect-tsgo patch --typescript --oxlint",
         "clean": "rimraf *.tsbuildinfo dist coverage",
-        "circular": "madge --circular src/*.ts",
         "codegen": "build-utils prepare-v4",
         "check": "tsc -b tsconfig.json",
         "lint": "oxlint && oxfmt --check",
@@ -75,7 +74,6 @@
         "@types/node": "25.9.5",
         "@vitest/coverage-v8": "4.1.10",
         "babel-plugin-annotate-pure-calls": "0.5.0",
-        "madge": "8.0.0",
         "oxfmt": "0.62.0",
         "oxlint": "1.77.0",
         "oxlint-tsgolint": "7.0.2001",

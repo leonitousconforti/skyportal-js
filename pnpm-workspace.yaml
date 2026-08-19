@@ -13,9 +13,6 @@ allowBuilds:
     esbuild: true
     msgpackr-extract: true
 
-overrides:
-    "madge>typescript": "7.0.2"
-
 peerDependencyRules:
     allowedVersions:
         typescript: "7.0.2"
