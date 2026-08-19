@@ -34,3 +34,6 @@ Fixes found while dogfooding the client in the SkyPortal frontend:
 - `postComment`/`updateComment` accept `channel`, the conversation a source
   comment belongs to, and the new `fetchCommentChannels`/`deleteCommentChannel`
   cover `/api/sources/{obj_id}/comments/channels`.
+- `updateSource` models the rest of the `Obj` columns `PATCH /api/sources/{id}`
+  loads through the Obj schema: `alias`, `t0`, `redshift_error`,
+  `redshift_origin`, `tns_name`, `varstar`, `is_roid`, `mpc_name`, `host_id`.

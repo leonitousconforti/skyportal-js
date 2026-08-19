@@ -1328,6 +1328,8 @@ export interface UpdateSourceOptions {
     readonly dec?: number | undefined;
     /** New redshift. */
     readonly redshift?: number | undefined;
+    readonly redshift_error?: number | undefined;
+    readonly redshift_origin?: string | undefined;
     /** Whether the source is an astrophysical transient. */
     readonly transient?: boolean | undefined;
     /** Discovery right ascension. */
@@ -1336,6 +1338,20 @@ export interface UpdateSourceOptions {
     readonly altdata?: Record<string, unknown> | undefined;
     /** New human-readable summary of the source. */
     readonly summary?: string | undefined;
+    /** Other names the object is known by. */
+    readonly alias?: ReadonlyArray<string> | undefined;
+    /** Reference time of the object's light curve, in MJD. */
+    readonly t0?: number | undefined;
+    /** TNS name of the object. */
+    readonly tns_name?: string | undefined;
+    /** Whether the object is a variable star. */
+    readonly varstar?: boolean | undefined;
+    /** Whether the object is a known solar-system object. */
+    readonly is_roid?: boolean | undefined;
+    /** Minor Planet Center designation. */
+    readonly mpc_name?: string | undefined;
+    /** Host galaxy of the object. */
+    readonly host_id?: number | undefined;
 }
 
 /**
