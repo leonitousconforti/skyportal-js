@@ -1340,8 +1340,8 @@ export interface UpdateSourceOptions {
     readonly summary?: string | undefined;
     /** Other names the object is known by. */
     readonly alias?: ReadonlyArray<string> | undefined;
-    /** Reference time of the object's light curve, in MJD. */
-    readonly t0?: number | undefined;
+    /** Reference time of the object's light curve, in MJD; null clears it. */
+    readonly t0?: number | null | undefined;
     /** TNS name of the object. */
     readonly tns_name?: string | undefined;
     /** Whether the object is a variable star. */
