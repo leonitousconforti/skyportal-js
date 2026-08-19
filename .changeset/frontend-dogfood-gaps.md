@@ -31,3 +31,6 @@ Fixes found while dogfooding the client in the SkyPortal frontend:
 - The follow-up request watch/unwatch endpoints accept `refreshSource` and
   `refreshRequests`, which the handlers read to decide what to push to
   connected frontends.
+- `postComment`/`updateComment` accept `channel`, the conversation a source
+  comment belongs to, and the new `fetchCommentChannels`/`deleteCommentChannel`
+  cover `/api/sources/{obj_id}/comments/channels`.

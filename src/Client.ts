@@ -203,6 +203,8 @@ const endpoints = {
     deleteComment: Comments.deleteComment,
     fetchComment: Comments.fetchComment,
     postCommentWithAttachment: Comments.postCommentWithAttachment,
+    fetchCommentChannels: Comments.fetchCommentChannels,
+    deleteCommentChannel: Comments.deleteCommentChannel,
     fetchCommentAttachment: Comments.fetchCommentAttachment,
     fetchCommentAttachmentPdf: Comments.fetchCommentAttachmentPdf,
     fetchCommentAttachmentText: Comments.fetchCommentAttachmentText,

@@ -230,6 +230,11 @@ export interface PostCommentOptions {
     /** What to comment on. Defaults to `"sources"`. */
     readonly resourceType?: CommentResourceType | undefined;
     /**
+     * Name of the conversation the comment belongs to. Source comments only; a
+     * conversation exists as soon as one of its comments names it.
+     */
+    readonly channel?: string | undefined;
+    /**
      * Restrict the comment's visibility to these groups. If omitted, the
      * server applies its default visibility.
      */
@@ -256,7 +261,7 @@ export const postComment = async (
         await Http.post(
             client,
             `/api/${options.resourceType ?? "sources"}/${resourceId}/comments`,
-            Http.body({ text, group_ids: options.groupIds })
+            Http.body({ text, group_ids: options.groupIds, channel: options.channel })
         )
     );
 
@@ -271,6 +276,8 @@ export interface UpdateCommentOptions {
     readonly text?: string | undefined;
     /** What the comment is on. Defaults to `"sources"`. */
     readonly resourceType?: CommentResourceType | undefined;
+    /** Name of the conversation the comment belongs to; source comments only. */
+    readonly channel?: string | undefined;
     /** Filename of the replacement attachment. */
     readonly attachmentName?: string | undefined;
     /**
@@ -309,7 +316,12 @@ export const updateComment = async (
     await Http.put(
         client,
         `/api/${options.resourceType ?? "sources"}/${resourceId}/comments/${commentId}`,
-        Http.body({ text: options.text, attachment, group_ids: options.groupIds })
+        Http.body({
+            text: options.text,
+            attachment,
+            group_ids: options.groupIds,
+            channel: options.channel,
+        })
     );
 };
 
@@ -393,6 +405,30 @@ export const postCommentWithAttachment = async (
             })
         )
     );
+
+/**
+ * Retrieve the names of the conversations opened on a source.
+ *
+ * A conversation exists as soon as one of its comments names it.
+ *
+ * @since 1.0.0
+ * @category Requests
+ * @param objId - Object ID of the source.
+ */
+export const fetchCommentChannels = async (client: Http.Client, objId: string): Promise<Array<string>> =>
+    Http.decode(v.array(v.string()), await Http.get(client, `/api/sources/${objId}/comments/channels`));
+
+/**
+ * Delete every comment of a source's conversation.
+ *
+ * @since 1.0.0
+ * @category Requests
+ * @param objId - Object ID of the source.
+ * @param channel - Name of the conversation to delete.
+ */
+export const deleteCommentChannel = async (client: Http.Client, objId: string, channel: string): Promise<void> => {
+    await Http.del(client, `/api/sources/${objId}/comments/channels`, undefined, { channel });
+};
 
 /**
  * Options for downloading a comment attachment.
