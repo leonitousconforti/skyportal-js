@@ -45,7 +45,7 @@ export type ProfileToken = v.InferOutput<typeof ProfileToken>;
  */
 export const UserProfile = Schemas.model(
     v.strictObject({
-        id: Schemas.NullishInteger,
+        id: Schemas.Integer,
         created_at: Schemas.NullishTimestamp,
         modified: Schemas.NullishTimestamp,
         username: v.string(),
