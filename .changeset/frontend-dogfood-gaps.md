@@ -9,8 +9,9 @@ Fixes found while dogfooding the client in the SkyPortal frontend:
   `affiliations`, `bio`, `is_bot`), not just `expirationDate`.
 - `updateGroup` accepts an explicit `null` for `nickname`/`description`, which
   is how the unique `nickname` column is cleared.
-- `Team.name` and `Allocation.group_id`/`instrument_id` are no longer nullable:
-  all three columns are `nullable=False` upstream.
+- `Team.name`, `Allocation.group_id`/`instrument_id` and `Listing.user_id`/
+  `obj_id`/`list_name` are no longer nullable: those columns are all
+  `nullable=False` upstream and their handlers serialize the whole model.
 - New `fetchAllocationPage`, which keeps the `totalMatches` sibling key that
   `fetchAllocation` drops, for paginating an allocation's follow-up requests.
 - New `Http.unwrapEnvelope`/`Http.getEnvelope` plus `fetchSysinfoWithVersion`

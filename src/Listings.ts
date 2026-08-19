@@ -23,9 +23,9 @@ export const Listing = Schemas.model(
         id: Schemas.Integer,
         created_at: Schemas.NullishTimestamp,
         modified: Schemas.NullishTimestamp,
-        user_id: Schemas.NullishInteger,
-        obj_id: Schemas.NullishString,
-        list_name: Schemas.NullishString,
+        user_id: Schemas.Integer,
+        obj_id: v.string(),
+        list_name: v.string(),
         params: Schemas.nullish(Schemas.JsonObject),
     })
 );
