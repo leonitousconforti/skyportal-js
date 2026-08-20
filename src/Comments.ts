@@ -48,6 +48,8 @@ export const CommentEntries = {
     earthquake: Schemas.nullish(Schemas.JsonObject),
     dateobs: Schemas.NullishTimestamp,
     resourceType: Schemas.NullishString,
+    /** Conversation the comment belongs to; null for the main thread. */
+    channel: Schemas.NullishString,
 };
 
 /**

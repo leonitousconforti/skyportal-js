@@ -4,6 +4,8 @@
 
 Fixes found while dogfooding the client in the SkyPortal frontend:
 
+- `Comment.channel` is now part of the comment model. It was only exposed as a
+  request option, so any source page carrying comments failed to decode.
 - `updateUser` now models every column `PATCH /api/user/{id}` assigns
   (`username`, `first_name`, `last_name`, `contact_email`, `contact_phone`,
   `affiliations`, `bio`, `is_bot`), not just `expirationDate`.
