@@ -50,6 +50,8 @@ export const CommentEntries = {
     resourceType: Schemas.NullishString,
     /** Conversation the comment belongs to; null for the main thread. */
     channel: Schemas.NullishString,
+    /** Whether the app posted the comment rather than its author typing it. */
+    system: Schemas.NullishBoolean,
 };
 
 /**

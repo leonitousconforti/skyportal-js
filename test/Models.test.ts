@@ -11,6 +11,11 @@ describe("strict models", () => {
         expect(comment.channel).toBe("planning");
     });
 
+    it("keeps the flag marking an app-posted comment", () => {
+        const comment = Http.decode(Comments.Comment, { id: 1, text: "saved to a group", system: true });
+        expect(comment.system).toBe(true);
+    });
+
     it("rejects a field the client does not know about", () => {
         expect(() => Http.decode(Streams.Stream, { id: 1, name: "ztf", surprise: true })).toThrow(
             Http.SkyPortalValidationError
