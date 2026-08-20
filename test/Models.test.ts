@@ -1,7 +1,14 @@
-import { Comments, Groups, Http, Photometry, Sources, Streams, Tags, Telescopes } from "skyportal-js";
+import { Assignments, Comments, Groups, Http, Photometry, Sources, Streams, Tags, Telescopes } from "skyportal-js";
 import { describe, expect, it } from "vitest";
 
 describe("strict models", () => {
+    it("accepts an assignment run as an id or as the eager-loaded run", () => {
+        const byId = Http.decode(Assignments.Assignment, { id: 1, run: 7 });
+        expect(byId.run).toBe(7);
+        const embedded = Http.decode(Assignments.Assignment, { id: 1, run: { id: 7, pi: "A. Nother" } });
+        expect(embedded.run).toEqual({ id: 7, pi: "A. Nother" });
+    });
+
     it("keeps a comment's conversation channel", () => {
         const comment = Http.decode(Comments.Comment, {
             id: 1,
