@@ -349,6 +349,20 @@ export const fetchPhotometry = async (
     );
 
 /**
+ * Options for posting photometry.
+ *
+ * @since 1.0.0
+ * @category Models
+ */
+export interface PostPhotometryOptions {
+    /**
+     * Ask the server to push a photometry refresh to any frontend that has the
+     * object open.
+     */
+    readonly refresh?: boolean | undefined;
+}
+
+/**
  * Post a photometry point.
  *
  * If `group_ids` is omitted, the server applies its default visibility. The
@@ -359,8 +373,20 @@ export const fetchPhotometry = async (
  * @category Requests
  * @param payload - The photometry point to post.
  */
-export const postPhotometry = async (client: Http.Client, payload: PhotometryPost): Promise<PhotometryPostResponse> =>
-    Http.decode(PhotometryPostResponse, await Http.post(client, "/api/photometry", Http.body(payload)));
+export const postPhotometry = async (
+    client: Http.Client,
+    payload: PhotometryPost,
+    options: PostPhotometryOptions = {}
+): Promise<PhotometryPostResponse> =>
+    Http.decode(
+        PhotometryPostResponse,
+        await Http.post(
+            client,
+            "/api/photometry",
+            Http.body(payload),
+            options.refresh === true ? { refresh: true } : undefined
+        )
+    );
 
 /**
  * Options for an upsert.

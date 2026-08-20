@@ -207,10 +207,23 @@ export interface UpdateUserOptions {
      * current value alone.
      */
     readonly expirationDate?: string | null | undefined;
+    /** New username; must not collide with an existing one. */
+    readonly username?: string | undefined;
+    readonly first_name?: string | null | undefined;
+    readonly last_name?: string | null | undefined;
+    readonly contact_email?: string | null | undefined;
+    readonly contact_phone?: string | null | undefined;
+    readonly affiliations?: ReadonlyArray<string> | null | undefined;
+    readonly bio?: string | null | undefined;
+    readonly is_bot?: boolean | undefined;
 }
 
 /**
  * Update a user record (requires the "Manage users" ACL).
+ *
+ * Apart from `expirationDate`, which the handler parses, every field is
+ * assigned to the user column of the same name, so the option names here are
+ * the column names rather than camelCase.
  *
  * @since 1.0.0
  * @category Requests

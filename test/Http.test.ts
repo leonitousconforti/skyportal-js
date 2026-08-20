@@ -34,6 +34,23 @@ describe("unwrap", () => {
     });
 });
 
+describe("unwrapEnvelope", () => {
+    it("returns the version SkyPortal adds beside data", async () => {
+        const response = new Response(JSON.stringify({ status: "success", data: { id: 1 }, version: "1.2.3" }));
+        expect(await Http.unwrapEnvelope(response)).toEqual({ data: { id: 1 }, version: "1.2.3", message: undefined });
+    });
+
+    it("reports a missing version as undefined rather than null", async () => {
+        const response = new Response(JSON.stringify({ status: "success", data: [] }));
+        expect((await Http.unwrapEnvelope(response)).version).toBeUndefined();
+    });
+
+    it("raises on an error envelope, like unwrap", async () => {
+        const response = new Response(JSON.stringify({ status: "error", message: "nope" }), { status: 400 });
+        await expect(Http.unwrapEnvelope(response)).rejects.toThrow("nope");
+    });
+});
+
 describe("unwrapContent", () => {
     it("returns the raw bytes of a successful response", async () => {
         const response = new Response(new Uint8Array([1, 2, 3]));

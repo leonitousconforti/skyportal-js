@@ -64,7 +64,7 @@ export const Team = Schemas.model(
         id: Schemas.Integer,
         created_at: Schemas.NullishTimestamp,
         modified: Schemas.NullishTimestamp,
-        name: Schemas.NullishString,
+        name: v.string(),
         nickname: Schemas.NullishString,
         description: Schemas.NullishString,
         primary_color: Schemas.NullishString,

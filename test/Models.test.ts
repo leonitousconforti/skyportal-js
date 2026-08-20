@@ -1,7 +1,16 @@
-import { Groups, Http, Photometry, Sources, Streams, Telescopes } from "skyportal-js";
+import { Comments, Groups, Http, Photometry, Sources, Streams, Telescopes } from "skyportal-js";
 import { describe, expect, it } from "vitest";
 
 describe("strict models", () => {
+    it("keeps a comment's conversation channel", () => {
+        const comment = Http.decode(Comments.Comment, {
+            id: 1,
+            text: "hi",
+            channel: "planning",
+        });
+        expect(comment.channel).toBe("planning");
+    });
+
     it("rejects a field the client does not know about", () => {
         expect(() => Http.decode(Streams.Stream, { id: 1, name: "ztf", surprise: true })).toThrow(
             Http.SkyPortalValidationError

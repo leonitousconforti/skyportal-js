@@ -80,6 +80,23 @@ export const fetchSysinfo = async (client: Http.Client): Promise<SysInfo> =>
     Http.decode(SysInfo, await Http.get(client, "/api/sysinfo"));
 
 /**
+ * Retrieve the system information together with the SkyPortal version the
+ * instance is running.
+ *
+ * `version` accompanies `data` on every response envelope rather than sitting
+ * inside it, so it is only available through this variant.
+ *
+ * @since 1.0.0
+ * @category Requests
+ */
+export const fetchSysinfoWithVersion = async (
+    client: Http.Client
+): Promise<{ readonly sysinfo: SysInfo; readonly version: string | undefined }> => {
+    const envelope = await Http.getEnvelope(client, "/api/sysinfo");
+    return { sysinfo: Http.decode(SysInfo, envelope.data), version: envelope.version };
+};
+
+/**
  * Retrieve whether the sources table is empty and the Postgres version.
  *
  * @since 1.0.0
@@ -126,6 +143,23 @@ export const fetchAnnotationsInfo = (client: Http.Client): Promise<unknown> =>
  */
 export const fetchConfig = async (client: Http.Client): Promise<Record<string, unknown>> =>
     Http.decode(Schemas.JsonObject, await Http.get(client, "/api/config"));
+
+/**
+ * Retrieve the client-facing config together with the SkyPortal version the
+ * instance is running.
+ *
+ * `version` accompanies `data` on every response envelope rather than sitting
+ * inside it, so it is only available through this variant.
+ *
+ * @since 1.0.0
+ * @category Requests
+ */
+export const fetchConfigWithVersion = async (
+    client: Http.Client
+): Promise<{ readonly config: Record<string, unknown>; readonly version: string | undefined }> => {
+    const envelope = await Http.getEnvelope(client, "/api/config");
+    return { config: Http.decode(Schemas.JsonObject, envelope.data), version: envelope.version };
+};
 
 /**
  * Retrieve basic database statistics (requires "System admin").
