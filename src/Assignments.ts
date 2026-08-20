@@ -52,7 +52,13 @@ export const Assignment = Schemas.model(
         obj: Schemas.nullish(Schemas.JsonObject),
         requester: Schemas.nullish(Users.User),
         last_modified_by: Schemas.NullishInteger,
-        run: Schemas.NullishInteger,
+        /**
+         * The run's ID from `/api/assignment`, but the whole run from the
+         * source payload, which eager-loads it. Free-form rather than
+         * {@link skyportal-js/ObservingRuns!ObservingRun} because that module
+         * imports this one.
+         */
+        run: Schemas.nullish(v.union([Schemas.Integer, Schemas.JsonObject])),
         spectra: Schemas.list(Schemas.Integer),
         photometry: Schemas.list(Schemas.Integer),
         photometric_series: Schemas.list(Schemas.Integer),
