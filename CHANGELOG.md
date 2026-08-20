@@ -1,5 +1,17 @@
 # skyportal-js
 
+## 0.3.2
+
+### Patch Changes
+
+- 0fb76aa: Accept an assignment's `run` as either an ID or the whole observing run. The
+  source payload eager-loads `ClassicalAssignment.run`, so it serializes as a
+  nested object there, while `/api/assignment` returns a bare primary key.
+- d0058e5: Model the `groups` that `POST /api/objtag` returns. The handler assigns the
+  groups to the new association before serializing it, so they ride along on the
+  response; strict decoding rejected them, which made a tag that the server had
+  actually created look like a failure to the caller.
+
 ## 0.3.1
 
 ### Patch Changes
