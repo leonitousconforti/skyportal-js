@@ -1,4 +1,4 @@
-import { Comments, Groups, Http, Photometry, Sources, Streams, Telescopes } from "skyportal-js";
+import { Comments, Groups, Http, Photometry, Sources, Streams, Tags, Telescopes } from "skyportal-js";
 import { describe, expect, it } from "vitest";
 
 describe("strict models", () => {
@@ -9,6 +9,16 @@ describe("strict models", () => {
             channel: "planning",
         });
         expect(comment.channel).toBe("planning");
+    });
+
+    it("keeps the groups a new tag association was shared with", () => {
+        const posted = Http.decode(Tags.ObjTagPostResponse, {
+            id: 5,
+            obj_id: "ZTF20abcdef",
+            objtagoption_id: 2,
+            groups: [{ id: 1, name: "Group", single_user_group: false }],
+        });
+        expect(posted.groups?.[0]?.name).toBe("Group");
     });
 
     it("keeps the flag marking an app-posted comment", () => {

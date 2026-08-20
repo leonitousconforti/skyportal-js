@@ -86,6 +86,12 @@ export const ObjTagPostResponse = Schemas.model(
         objtagoption_id: Schemas.NullishInteger,
         author_id: Schemas.NullishInteger,
         message: Schemas.NullishString,
+        /**
+         * The groups the tag was shared with. The handler assigns them to the
+         * association before serializing it, so they ride along on the
+         * response even though they are a relationship rather than a column.
+         */
+        groups: Schemas.nullish(v.array(Groups.Group)),
     })
 );
 
